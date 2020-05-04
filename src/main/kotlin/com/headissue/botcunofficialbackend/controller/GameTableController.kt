@@ -1,6 +1,8 @@
 package com.headissue.botcunofficialbackend.controller
 
-import org.springframework.web.bind.annotation.GetMapping
+import com.headissue.botcunofficialbackend.model.GameTable
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.PostMapping
 
 import org.springframework.web.bind.annotation.RestController
 import java.util.*
@@ -9,11 +11,8 @@ import java.util.*
 @RestController
 class GameTableController {
 
-  @GetMapping("/api/hello")
-  fun hello(): String {
-    return """
-      Hello, the time adsasdasat the server is now ${Date()}
-      
-      """.trimIndent()
+  @PostMapping("/gametables", produces = ["application/json"])
+  fun createNewGameTable(): ResponseEntity<Any> {
+    return ResponseEntity.ok(GameTable())
   }
 }
