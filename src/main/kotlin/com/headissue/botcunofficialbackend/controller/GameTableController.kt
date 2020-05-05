@@ -4,7 +4,6 @@ import com.headissue.botcunofficialbackend.model.GameTable
 import com.headissue.botcunofficialbackend.model.Player
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-
 import java.util.*
 import kotlin.NoSuchElementException
 
@@ -35,6 +34,13 @@ class GameTableController {
   fun joinGame(@PathVariable id: String, @RequestParam name: String): ResponseEntity<GameTable> {
     val gameTable = internalGetTable(id)
     gameTable.players.add(Player(name))
+    return ResponseEntity.ok(gameTable)
+  }
+
+  @PostMapping("/gametable/{id}/start")
+  fun startGame(@PathVariable id: String): ResponseEntity<GameTable> {
+    val gameTable = GameTable.start(internalGetTable(id))
+    gameTables[id] = gameTable
     return ResponseEntity.ok(gameTable)
   }
 
