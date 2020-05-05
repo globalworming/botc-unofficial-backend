@@ -44,6 +44,29 @@ class GameTableController {
     return ResponseEntity.ok(gameTable)
   }
 
+  @PostMapping("/gametable/{id}/nextTurn")
+  fun nextTurn(@PathVariable id: String): ResponseEntity<GameTable> {
+    val gameTable = GameTable.nextTurn(internalGetTable(id))
+    gameTables[id] = gameTable
+    return ResponseEntity.ok(gameTable)
+  }
+
+  @PostMapping("/gametable/{id}/player/{name}/kill")
+  fun killPlayer(@PathVariable id: String, @PathVariable name: String): ResponseEntity<GameTable> {
+    val gameTable = internalGetTable(id)
+    val player = Optional.ofNullable(gameTable.players.find { it.name == name }).orElseThrow { NoSuchElementException() }
+    player.dead = true
+    return ResponseEntity.ok(gameTable)
+  }
+
+  @PostMapping("/gametable/{id}/player/{name}/voted")
+  fun markPlayerUsedVote(@PathVariable id: String, @PathVariable name: String): ResponseEntity<GameTable> {
+    val gameTable = internalGetTable(id)
+    val player = gameTable.playerNamed(name)
+    player.canVote = false
+    return ResponseEntity.ok(gameTable)
+  }
+
   private fun internalGetTable(id: String) = Optional.ofNullable(gameTables[id]).orElseThrow { NoSuchElementException() }
 
 }
