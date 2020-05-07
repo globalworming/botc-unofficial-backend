@@ -1,10 +1,12 @@
 package com.headissue.botcunofficialbackend.controller
 
 import com.headissue.botcunofficialbackend.model.GameTable
+import com.headissue.botcunofficialbackend.model.GameTableView
 import com.headissue.botcunofficialbackend.model.Player
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
+import javax.servlet.http.HttpSession
 import kotlin.NoSuchElementException
 
 
@@ -19,15 +21,16 @@ class GameTableController {
   }
 
   @PostMapping("/gameTables")
-  fun createNewGameTable(@RequestParam id: String): ResponseEntity<GameTable> {
-    val gameTable = GameTable(id)
+  fun createNewGameTable(@RequestParam id: String, session: HttpSession): ResponseEntity<GameTable> {
+    val gameTable = GameTable(id = id, storyTeller = session.id)
     gameTables[id] = gameTable
     return ResponseEntity.ok(gameTable)
   }
 
   @GetMapping("/gameTable/{id}")
-  fun askForGameTable(@PathVariable id: String): ResponseEntity<GameTable> {
-    return ResponseEntity.ok(internalGetTable(id))
+  fun askForGameTable(@PathVariable id: String, session: HttpSession): ResponseEntity<out GameTableView> {
+    val gameTable = internalGetTable(id)
+    return ResponseEntity.ok(GameTableView.of(gameTable).forStoryTeller())
   }
 
   @PostMapping("/gameTable/{id}/players")
