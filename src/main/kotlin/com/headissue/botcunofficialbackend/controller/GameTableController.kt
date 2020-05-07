@@ -30,7 +30,8 @@ class GameTableController {
   @GetMapping("/gameTable/{id}")
   fun askForGameTable(@PathVariable id: String, session: HttpSession): ResponseEntity<out GameTableView> {
     val gameTable = internalGetTable(id)
-    return ResponseEntity.ok(GameTableView.of(gameTable).forStoryTeller())
+    val gameTableView = if (gameTable.storyTeller == session.id) GameTableView.of(gameTable).forStoryTeller() else GameTableView.of(gameTable).forPlayer()
+    return ResponseEntity.ok(gameTableView)
   }
 
   @PostMapping("/gameTable/{id}/players")

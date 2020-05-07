@@ -20,4 +20,11 @@ class GameTableViewBuilder(var gameTable: GameTable? = null) {
       storyTeller = true
   )
 
+  fun forPlayer(): GameTableView = GameTableView(
+      id = gameTable!!.id,
+      players = gameTable!!.players,
+      turn = gameTable!!.turn,
+      storyTeller = false
+  )
+
 }
