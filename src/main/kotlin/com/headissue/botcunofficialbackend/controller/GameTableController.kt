@@ -13,45 +13,45 @@ class GameTableController {
 
   val gameTables = mutableMapOf<String, GameTable>()
 
-  @GetMapping("/gametables")
+  @GetMapping("/gameTables")
   fun askForGameTables(): ResponseEntity<Collection<GameTable>> {
     return ResponseEntity.ok(gameTables.values)
   }
 
-  @PostMapping("/gametables")
+  @PostMapping("/gameTables")
   fun createNewGameTable(@RequestParam id: String): ResponseEntity<GameTable> {
     val gameTable = GameTable(id)
     gameTables[id] = gameTable
     return ResponseEntity.ok(gameTable)
   }
 
-  @GetMapping("/gametable/{id}")
+  @GetMapping("/{id}")
   fun askForGameTable(@PathVariable id: String): ResponseEntity<GameTable> {
     return ResponseEntity.ok(internalGetTable(id))
   }
 
-  @PostMapping("/gametable/{id}/players")
+  @PostMapping("/gameTable/{id}/players")
   fun joinGame(@PathVariable id: String, @RequestParam name: String): ResponseEntity<GameTable> {
     val gameTable = internalGetTable(id)
     gameTable.players.add(Player(name))
     return ResponseEntity.ok(gameTable)
   }
 
-  @PostMapping("/gametable/{id}/start")
+  @PostMapping("/gameTable/{id}/start")
   fun startGame(@PathVariable id: String): ResponseEntity<GameTable> {
     val gameTable = GameTable.start(internalGetTable(id))
     gameTables[id] = gameTable
     return ResponseEntity.ok(gameTable)
   }
 
-  @PostMapping("/gametable/{id}/nextTurn")
+  @PostMapping("/gameTable/{id}/nextTurn")
   fun nextTurn(@PathVariable id: String): ResponseEntity<GameTable> {
     val gameTable = GameTable.nextTurn(internalGetTable(id))
     gameTables[id] = gameTable
     return ResponseEntity.ok(gameTable)
   }
 
-  @PostMapping("/gametable/{id}/player/{name}/kill")
+  @PostMapping("/gameTable/{id}/player/{name}/kill")
   fun killPlayer(@PathVariable id: String, @PathVariable name: String): ResponseEntity<GameTable> {
     val gameTable = internalGetTable(id)
     val player = Optional.ofNullable(gameTable.players.find { it.name == name }).orElseThrow { NoSuchElementException() }
@@ -59,7 +59,7 @@ class GameTableController {
     return ResponseEntity.ok(gameTable)
   }
 
-  @PostMapping("/gametable/{id}/player/{name}/voted")
+  @PostMapping("/gameTable/{id}/player/{name}/voted")
   fun markPlayerUsedVote(@PathVariable id: String, @PathVariable name: String): ResponseEntity<GameTable> {
     val gameTable = internalGetTable(id)
     val player = gameTable.playerNamed(name)
