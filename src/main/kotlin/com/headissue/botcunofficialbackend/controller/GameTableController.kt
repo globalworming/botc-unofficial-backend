@@ -25,7 +25,7 @@ class GameTableController {
     return ResponseEntity.ok(gameTable)
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/gameTable/{id}")
   fun askForGameTable(@PathVariable id: String): ResponseEntity<GameTable> {
     return ResponseEntity.ok(internalGetTable(id))
   }
