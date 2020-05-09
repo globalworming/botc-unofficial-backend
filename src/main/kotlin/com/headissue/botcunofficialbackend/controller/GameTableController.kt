@@ -11,7 +11,7 @@ import kotlin.NoSuchElementException
 
 
 @RestController
-class GameTableController {
+class GameTableController: BaseRestController() {
 
   val gameTables = mutableMapOf<String, GameTable>()
 
