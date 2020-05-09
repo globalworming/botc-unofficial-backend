@@ -3,6 +3,7 @@ package com.headissue.botcunofficialbackend.controller
 import com.headissue.botcunofficialbackend.model.GameTable
 import com.headissue.botcunofficialbackend.model.GameTableView
 import com.headissue.botcunofficialbackend.model.Player
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -14,6 +15,8 @@ import kotlin.NoSuchElementException
 class GameTableController: BaseRestController() {
 
   val gameTables = mutableMapOf<String, GameTable>()
+
+  @Autowired lateinit var updateController: WebSocketController
 
   @GetMapping("/gameTables")
   fun askForGameTables(): ResponseEntity<Collection<GameTable>> {
@@ -40,6 +43,7 @@ class GameTableController: BaseRestController() {
   fun joinGame(@PathVariable id: String, @RequestParam name: String, session: HttpSession): ResponseEntity<GameTableView> {
     val gameTable = internalGetTable(id)
     gameTable.players.add(Player(name, session.id))
+    updateController.updateMessage()
     return ResponseEntity.ok(GameTableView.of(gameTable).forPlayer(session.id))
   }
 
