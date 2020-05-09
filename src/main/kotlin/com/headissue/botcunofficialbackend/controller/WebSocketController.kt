@@ -11,8 +11,8 @@ class WebSocketController {
   @Autowired
   lateinit var  messagingTemplate: SimpMessageSendingOperations
 
-  fun updateMessage() {
-    messagingTemplate.convertAndSend("/topic/public", "update!")
+  fun updateMessage(id: String) {
+    messagingTemplate.convertAndSend("/topic/gameTable/${id}/updates", "{}")
 
   }
 

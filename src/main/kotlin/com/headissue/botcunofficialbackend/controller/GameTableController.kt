@@ -43,7 +43,7 @@ class GameTableController: BaseRestController() {
   fun joinGame(@PathVariable id: String, @RequestParam name: String, session: HttpSession): ResponseEntity<GameTableView> {
     val gameTable = internalGetTable(id)
     gameTable.players.add(Player(name, session.id))
-    updateController.updateMessage()
+    updateController.updateMessage(gameTable.id)
     return ResponseEntity.ok(GameTableView.of(gameTable).forPlayer(session.id))
   }
 
