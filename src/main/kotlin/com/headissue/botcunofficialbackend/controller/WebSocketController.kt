@@ -13,7 +13,7 @@ class WebSocketController {
 
   fun updateMessage(id: String) {
     messagingTemplate.convertAndSend("/topic/gameTable/${id}/updates", "{}")
-
   }
+
 
 }
