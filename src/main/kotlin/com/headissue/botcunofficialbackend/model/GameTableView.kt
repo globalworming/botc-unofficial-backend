@@ -5,26 +5,35 @@ data class GameTableView(
     val players: List<Player>,
     val turn: Int,
     val isDay: Boolean = turn % 2 == 0,
-    val storyTeller: Boolean
+    val isStoryTeller: Boolean,
+    val you: String
 ) {
   companion object {
-    fun of(gameTable: GameTable): GameTableViewBuilder = GameTableViewBuilder(gameTable = gameTable)
+    fun of(gameTable: GameTable): GameTableViewFactory = GameTableViewFactory(gameTable)
   }
 }
 
-class GameTableViewBuilder(var gameTable: GameTable? = null) {
+class GameTableViewFactory(var gameTable: GameTable) {
+
   fun forStoryTeller(): GameTableView = GameTableView(
-      id = gameTable!!.id,
-      players = gameTable!!.players,
-      turn = gameTable!!.turn,
-      storyTeller = true
+      id = gameTable.id,
+      players = gameTable.players,
+      turn = gameTable.turn,
+      isStoryTeller = true,
+      you = "storyteller"
   )
 
-  fun forPlayer(): GameTableView = GameTableView(
-      id = gameTable!!.id,
-      players = gameTable!!.players,
-      turn = gameTable!!.turn,
-      storyTeller = false
+  fun forPlayer(sessionId: String): GameTableView = GameTableView(
+      id = gameTable.id,
+      players = gameTable.players,
+      turn = gameTable.turn,
+      isStoryTeller = false,
+      you = playerNameFor(sessionId, gameTable)
   )
+
+  private fun playerNameFor(sessionId: String, gameTable: GameTable): String {
+    val player = gameTable.players.firstOrNull { it.sessionId == sessionId }
+    return player?.name ?: ""
+  }
 
 }

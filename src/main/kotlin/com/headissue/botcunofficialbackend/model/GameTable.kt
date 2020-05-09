@@ -5,10 +5,10 @@ import kotlin.NoSuchElementException
 
 data class GameTable(
     val id: String,
+    val storyTeller: String,
     val players: MutableList<Player> = mutableListOf(),
     val turn: Int = 0,
-    val isDay: Boolean = turn % 2 == 0,
-    val storyTeller: String
+    val isDay: Boolean = turn % 2 == 0
 ) {
 
   fun playerNamed(name: String): Player = Optional.ofNullable(players.find { it.name == name })
