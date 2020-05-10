@@ -53,7 +53,8 @@ class GameTableController: BaseRestController() {
 
   @PostMapping("/gameTable/{id}/start")
   fun startGame(@PathVariable id: String): ResponseEntity<GameTableView> {
-    val gameTable = GameTable.start(internalGetTable(id))
+    val gameTable = internalGetTable(id)
+    gameTable.turn = gameTable.turn + 1
     gameTables[id] = gameTable
     notifyWebSocketClientsNeedToUpdate(gameTable.id)
     return ResponseEntity.ok(GameTableView.of(gameTable).forStoryTeller())
@@ -61,7 +62,8 @@ class GameTableController: BaseRestController() {
 
   @PostMapping("/gameTable/{id}/nextTurn")
   fun nextTurn(@PathVariable id: String): ResponseEntity<GameTableView> {
-    val gameTable = GameTable.nextTurn(internalGetTable(id))
+    val gameTable = internalGetTable(id)
+    gameTable.turn = gameTable.turn + 1
     gameTables[id] = gameTable
     notifyWebSocketClientsNeedToUpdate(gameTable.id)
     return ResponseEntity.ok(GameTableView.of(gameTable).forStoryTeller())
@@ -81,6 +83,22 @@ class GameTableController: BaseRestController() {
     val gameTable = internalGetTable(id)
     val player = gameTable.playerNamed(name)
     player.canVote = false
+    notifyWebSocketClientsNeedToUpdate(gameTable.id)
+    return ResponseEntity.ok(GameTableView.of(gameTable).forStoryTeller())
+  }
+
+  @PostMapping("/gameTable/{id}/goodWins")
+  fun goodWins(@PathVariable id: String): ResponseEntity<GameTableView> {
+    val gameTable = internalGetTable(id)
+    gameTable.goodWon = true
+    notifyWebSocketClientsNeedToUpdate(gameTable.id)
+    return ResponseEntity.ok(GameTableView.of(gameTable).forStoryTeller())
+  }
+
+  @PostMapping("/gameTable/{id}/evilWins")
+  fun evilWins(@PathVariable id: String): ResponseEntity<GameTableView> {
+    val gameTable = internalGetTable(id)
+    gameTable.evilWon = true
     notifyWebSocketClientsNeedToUpdate(gameTable.id)
     return ResponseEntity.ok(GameTableView.of(gameTable).forStoryTeller())
   }

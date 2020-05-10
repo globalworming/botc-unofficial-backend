@@ -4,24 +4,17 @@ import java.util.*
 import kotlin.NoSuchElementException
 
 data class GameTable(
-    val id: String,
-    val storyTeller: String,
-    val players: MutableList<Player> = mutableListOf(),
-    val turn: Int = 0,
-    val isDay: Boolean = turn % 2 == 0
+    var id: String,
+    var storyTeller: String,
+    var evilWon: Boolean = false,
+    var goodWon: Boolean = false,
+    var players: MutableList<Player> = mutableListOf(),
+    var turn: Int = 0,
+    var isDay: Boolean = turn % 2 == 0
 ) {
+
 
   fun playerNamed(name: String): Player = Optional.ofNullable(players.find { it.name == name })
       .orElseThrow { NoSuchElementException() }
 
-  companion object {
-    fun start(gameTable: GameTable): GameTable = nextTurn(gameTable)
-
-    fun nextTurn(gameTable: GameTable): GameTable = GameTable(
-        id = gameTable.id,
-        players = gameTable.players,
-        turn = gameTable.turn + 1,
-        storyTeller = gameTable.storyTeller
-    )
-  }
 }
