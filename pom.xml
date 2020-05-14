@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.headissue</groupId>
 	<artifactId>botc-unofficial-spring</artifactId>
-	<version>0.1.1</version>
+	<version>0.2-SNAPSHOT</version>
 	<name>botc-unofficial-spring</name>
 	<description>spring backend for botc</description>
 
